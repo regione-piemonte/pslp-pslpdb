@@ -22,11 +22,10 @@ Per il versionamento del software si usa la tecnica Semantic Versioning (http://
 # Authors
 Fare riferimento a quanto riportato nel file AUTHORS.txt.
 
-#Copyrights
+# Copyrights
 © Copyright Regione Piemonte – 2021
 © Copyright CSI-Piemonte – 2021
-
-Questo stesso elenco dei titolari del software è anche riportato in Copyrights.txt .
+Vedere anche il file Copyrights.txt .
 
 # License
 Il prodotto software è sottoposto alla licenza EUPL-1.2 o versioni successive.
