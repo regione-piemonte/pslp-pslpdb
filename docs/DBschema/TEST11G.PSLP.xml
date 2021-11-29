@@ -1,0 +1,774 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<database name="TEST11G" schema="PSLP" type="Oracle - Oracle Database 11g Release 11.1.0.0.0 - Production">
+   <tables>
+      <table name="PSLP_D_AMBITO" numRows="4" remarks="" schema="PSLP" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="COD_AMBITO" nullable="false" remarks="" size="5" type="VARCHAR2">
+            <child column="COD_AMBITO" foreignKey="FK_PSLP_D_AMBITO_01" implied="false" onDeleteCascade="false" table="PSLP_D_MESSAGGIO"/>
+            <child column="COD_AMBITO" foreignKey="FK_PSLP_D_AMBITO_03" implied="false" onDeleteCascade="false" table="PSLP_R_AMBITO_TIPO_DOC"/>
+            <child column="COD_AMBITO" foreignKey="FK_PSLP_D_AMBITO_02" implied="false" onDeleteCascade="false" table="PSLP_T_CALENDARIO"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="DESCR_AMBITO" nullable="false" remarks="" size="200" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="2" name="ID_SIL_T_IN_SERVIZIO" nullable="true" remarks="L'ID servizio su cui viene creato il contatto su SILP, per differenziare in base all'Ambiente (Test/Prod) e all'Ambito" size="22" type="NUMBER"/>
+         <primaryKey column="COD_AMBITO" sequenceNumberInPK="1"/>
+         <index name="PK_PSLP_D_AMBITO" unique="true">
+            <column ascending="true" name="COD_AMBITO"/>
+         </index>
+      </table>
+      <table name="PSLP_D_ENTE_SERVIZIO_LAVORO" numRows="44" remarks="" schema="PSLP" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="ID_ENTE_SERVIZIO_LAVORO" nullable="false" remarks="" size="22" type="NUMBER">
+            <child column="ID_ENTE_PADRE" foreignKey="FK_PSLP_D_ENTE_SERVIZIO_LAV_01" implied="false" onDeleteCascade="false" table="PSLP_D_ENTE_SERVIZIO_LAVORO"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="DESCR_ENTE_SERVIZIO_LAVORO" nullable="false" remarks="" size="50" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="2" name="COD_TIPO_ENTE" nullable="false" remarks="" size="2" type="VARCHAR2">
+            <parent column="COD_TIPO_ENTE" foreignKey="FK_PSLP_D_TIPO_ENTE_01" implied="false" onDeleteCascade="false" table="PSLP_D_TIPO_ENTE"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="3" name="COD_MIN" nullable="true" remarks="Eventuale codice ministeriale dell'ente" size="20" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="4" name="INDIRIZZO" nullable="true" remarks="Contiene l'indirizzo dell'ente in formato testo libero, comprensivo anche di cap, comune, ..." size="200" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="5" name="ID_PROVINCIA" nullable="false" remarks="" size="3" type="VARCHAR2">
+            <parent column="ID_PROVINCIA" foreignKey="FK_PSLP_D_PROVINCIA_01" implied="false" onDeleteCascade="false" table="PSLP_D_PROVINCIA"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="6" name="NUM_TEL" nullable="true" remarks="Numero di telefono dell'ente; in caso di più numeri di telefono, vengono inseriti tutti in questo campo" size="50" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="7" name="EMAIL" nullable="true" remarks="" size="60" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="8" name="GRUPPO_OPERATORE_SA" nullable="true" remarks="" size="1" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="9" name="COD_OPERATORE_SA" nullable="true" remarks="" size="5" type="NUMBER"/>
+         <column autoUpdated="false" digits="0" id="10" name="SUBCODICE_SEDE" nullable="true" remarks="" size="4" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="11" name="ID_ENTE_PADRE" nullable="true" remarks="Nel caso di sportello CPI, contiene il CPI di appartenenza" size="22" type="NUMBER">
+            <parent column="ID_ENTE_SERVIZIO_LAVORO" foreignKey="FK_PSLP_D_ENTE_SERVIZIO_LAV_01" implied="false" onDeleteCascade="false" table="PSLP_D_ENTE_SERVIZIO_LAVORO"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="12" name="LATITUDINE" nullable="true" remarks="Espressa in numero decimale" size="22" type="NUMBER"/>
+         <column autoUpdated="false" digits="0" id="13" name="LONGITUDINE" nullable="true" remarks="Espressa in numero decimale" size="22" type="NUMBER"/>
+         <column autoUpdated="false" digits="0" id="14" name="ORARIO_DI_APERTURA" nullable="true" remarks="Campo di testo libero per inserire gli orari di apertura" size="1000" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="15" name="NOTE" nullable="true" remarks="" size="4000" type="VARCHAR2"/>
+         <primaryKey column="ID_ENTE_SERVIZIO_LAVORO" sequenceNumberInPK="1"/>
+         <index name="PK_PSLP_D_ENTE_SERVIZIO_LAVORO" unique="true">
+            <column ascending="true" name="ID_ENTE_SERVIZIO_LAVORO"/>
+         </index>
+         <index name="IE_PSLP_D_ENTE_SERVIZIO_LAV_01" unique="false">
+            <column ascending="true" name="ID_PROVINCIA"/>
+         </index>
+         <index name="IE_PSLP_D_ENTE_SERVIZIO_LAV_02" unique="false">
+            <column ascending="true" name="ID_ENTE_PADRE"/>
+         </index>
+         <checkConstraint constraint="(COD_TIPO_ENTE = 'S' AND ID_ENTE_PADRE IS NOT NULL) OR (COD_TIPO_ENTE &lt;&gt; 'S' AND ID_ENTE_PADRE IS NULL)" name="CHK_PSLP_D_ENTE_SERVIZ_LAV_01"/>
+      </table>
+      <table name="PSLP_D_ESTENSIONE_DOC" numRows="17" remarks="" schema="PSLP" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="COD_ESTENSIONE_DOC" nullable="false" remarks="" size="4" type="VARCHAR2">
+            <child column="COD_ESTENSIONE_DOC" foreignKey="FK_PSLP_D_ESTENSIONE_DOC_01" implied="false" onDeleteCascade="false" table="PSLP_R_TIPO_DOC_ESTENSIONE"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="DESCR_ESTENSIONE_DOC" nullable="false" remarks="" size="100" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="2" name="DS_MIME_TYPE" nullable="true" remarks="" size="500" type="VARCHAR2"/>
+         <primaryKey column="COD_ESTENSIONE_DOC" sequenceNumberInPK="1"/>
+         <index name="PK_PSLP_D_ESTENSIONE_DOC" unique="true">
+            <column ascending="true" name="COD_ESTENSIONE_DOC"/>
+         </index>
+      </table>
+      <table name="PSLP_D_MESSAGGIO" numRows="166" remarks="" schema="PSLP" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="ID_MESSAGGIO" nullable="false" remarks="" size="22" type="NUMBER">
+            <child column="ID_MESSAGGIO" foreignKey="FK_PSLP_D_MESSAGGIO_01" implied="false" onDeleteCascade="false" table="PSLP_T_MESSAGGIO_AGGIUNTIVO"/>
+            <child column="ID_MESSAGGIO" foreignKey="FK_PSLP_D_MESSAGGIO_02" implied="false" onDeleteCascade="false" table="PSLP_T_MESSAGGIO_UTENTE"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="COD_MESSAGGIO" nullable="false" remarks="" size="5" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="2" name="DESCR_MESSAGGIO" nullable="false" remarks="" size="200" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="3" name="COD_AMBITO" nullable="false" remarks="" size="5" type="VARCHAR2">
+            <parent column="COD_AMBITO" foreignKey="FK_PSLP_D_AMBITO_01" implied="false" onDeleteCascade="false" table="PSLP_D_AMBITO"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="4" name="COD_TIPO_MESSAGGIO" nullable="false" remarks="" size="20" type="VARCHAR2">
+            <parent column="COD_TIPO_MESSAGGIO" foreignKey="FK_PSLP_D_TIPO_MESSAGGIO_01" implied="false" onDeleteCascade="false" table="PSLP_D_TIPO_MESSAGGIO"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="5" name="INTESTAZIONE" nullable="false" remarks="" size="200" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="6" name="TESTO" nullable="true" remarks="Questo e' il messaggio che viene prelevato dall'applicativo" size="4000" type="CLOB"/>
+         <column autoUpdated="false" digits="6" id="7" name="D_INIZIO" nullable="false" remarks="" size="11" type="TIMESTAMP(6)"/>
+         <column autoUpdated="false" digits="6" id="8" name="D_FINE" nullable="true" remarks="" size="11" type="TIMESTAMP(6)"/>
+         <primaryKey column="ID_MESSAGGIO" sequenceNumberInPK="1"/>
+         <index name="PK_PSLP_D_MESSAGGIO" unique="true">
+            <column ascending="true" name="ID_MESSAGGIO"/>
+         </index>
+         <index name="IE_PSLP_D_MESSAGGIO_01" unique="false">
+            <column ascending="true" name="COD_MESSAGGIO"/>
+         </index>
+         <index name="IE_PSLP_D_MESSAGGIO_02" unique="false">
+            <column ascending="true" name="COD_AMBITO"/>
+         </index>
+         <index name="IE_PSLP_D_MESSAGGIO_03" unique="false">
+            <column ascending="true" name="COD_TIPO_MESSAGGIO"/>
+         </index>
+      </table>
+      <table name="PSLP_D_PARAMETRO" numRows="27" remarks="" schema="PSLP" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="ID_PARAMETRO" nullable="false" remarks="" size="22" type="NUMBER"/>
+         <column autoUpdated="false" digits="0" id="1" name="COD_PARAMETRO" nullable="false" remarks="" size="20" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="2" name="DESCR_PARAMETRO" nullable="false" remarks="" size="200" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="3" name="VALORE_PARAMETRO" nullable="true" remarks="" size="1000" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="4" name="VALORE_PARAMETRO_EXT" nullable="true" remarks="" size="4000" type="CLOB"/>
+         <column autoUpdated="false" digits="0" id="5" name="DT_INIZIO" nullable="false" remarks="" size="7" type="DATE"/>
+         <column autoUpdated="false" digits="0" id="6" name="DT_FINE" nullable="true" remarks="" size="7" type="DATE"/>
+         <primaryKey column="ID_PARAMETRO" sequenceNumberInPK="1"/>
+         <index name="PK_PSLP_D_PARAMETRO" unique="true">
+            <column ascending="true" name="ID_PARAMETRO"/>
+         </index>
+         <index name="IE_PSLP_D_PARAMETRO_01" unique="false">
+            <column ascending="true" name="COD_PARAMETRO"/>
+         </index>
+      </table>
+      <table name="PSLP_D_PROVINCIA" numRows="8" remarks="Tabella nata con le sole province piemontesi per visualizzazione in una combo in maschera per selezionare la provincia di cui si vogliono vedere gli enti_servizio_lavoro" schema="PSLP" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="ID_PROVINCIA" nullable="false" remarks="" size="3" type="VARCHAR2">
+            <child column="ID_PROVINCIA" foreignKey="FK_PSLP_D_PROVINCIA_01" implied="false" onDeleteCascade="false" table="PSLP_D_ENTE_SERVIZIO_LAVORO"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="DESCR_PROVINCIA" nullable="false" remarks="" size="30" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="2" name="D_INIZIO" nullable="false" remarks="" size="7" type="DATE"/>
+         <column autoUpdated="false" digits="0" id="3" name="D_FINE" nullable="true" remarks="" size="7" type="DATE"/>
+         <primaryKey column="ID_PROVINCIA" sequenceNumberInPK="1"/>
+         <index name="PK_PSLP_D_PROVINCIA" unique="true">
+            <column ascending="true" name="ID_PROVINCIA"/>
+         </index>
+      </table>
+      <table name="PSLP_D_QUERY_REPLACED" numRows="0" remarks="" schema="PSLP" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="COD_QUERY_REPLACED" nullable="false" remarks="" size="500" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="1" name="DS_QUERY_REPLACED" nullable="false" remarks="" size="4000" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="2" name="DS_QUERY_REPLACED_EXT" nullable="true" remarks="" size="4000" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="3" name="FLG_ATTIVO" nullable="true" remarks="" size="1" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="4" name="NUM_SECONDI_TIMEOUT" nullable="true" remarks="" size="4" type="NUMBER"/>
+         <primaryKey column="COD_QUERY_REPLACED" sequenceNumberInPK="1"/>
+         <index name="PK_PSLP_D_QUERY_REPLACED" unique="true">
+            <column ascending="true" name="COD_QUERY_REPLACED"/>
+         </index>
+         <checkConstraint constraint="FLG_ATTIVO = 'S'" name="CHK_PSLP_D_QUERY_REPLACED_01"/>
+      </table>
+      <table name="PSLP_D_STATO_DOCUMENTO" numRows="4" remarks="" schema="PSLP" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="COD_STATO_DOCUMENTO" nullable="false" remarks="" size="2" type="VARCHAR2">
+            <child column="COD_STATO_DOCUMENTO" foreignKey="FK_PSLP_D_STATO_DOCUMENTO_01" implied="false" onDeleteCascade="false" table="PSLP_T_DOCUMENTO"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="DESCR_STATO_DOCUMENTO" nullable="false" remarks="" size="100" type="VARCHAR2"/>
+         <primaryKey column="COD_STATO_DOCUMENTO" sequenceNumberInPK="1"/>
+         <index name="PK_PSLP_D_STATO_DOCUMENTO" unique="true">
+            <column ascending="true" name="COD_STATO_DOCUMENTO"/>
+         </index>
+      </table>
+      <table name="PSLP_D_TIPO_DOCUMENTO" numRows="7" remarks="" schema="PSLP" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="COD_TIPO_DOCUMENTO" nullable="false" remarks="" size="5" type="VARCHAR2">
+            <child column="COD_TIPO_DOCUMENTO" foreignKey="FK_PSLP_D_TIPO_DOCUMENTO_01" implied="false" onDeleteCascade="false" table="PSLP_R_AMBITO_TIPO_DOC"/>
+            <child column="COD_TIPO_DOCUMENTO" foreignKey="FK_PSLP_D_TIPO_DOCUMENTO_02" implied="false" onDeleteCascade="false" table="PSLP_R_TIPO_DOC_ESTENSIONE"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="DESCR_TIPO_DOCUMENTO" nullable="false" remarks="" size="100" type="VARCHAR2"/>
+         <primaryKey column="COD_TIPO_DOCUMENTO" sequenceNumberInPK="1"/>
+         <index name="PK_PSLP_D_TIPO_DOCUMENTO" unique="true">
+            <column ascending="true" name="COD_TIPO_DOCUMENTO"/>
+         </index>
+      </table>
+      <table name="PSLP_D_TIPO_ENTE" numRows="2" remarks="" schema="PSLP" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="COD_TIPO_ENTE" nullable="false" remarks="" size="2" type="VARCHAR2">
+            <child column="COD_TIPO_ENTE" foreignKey="FK_PSLP_D_TIPO_ENTE_01" implied="false" onDeleteCascade="false" table="PSLP_D_ENTE_SERVIZIO_LAVORO"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="DESCR_TIPO_ENTE" nullable="false" remarks="" size="100" type="VARCHAR2"/>
+         <primaryKey column="COD_TIPO_ENTE" sequenceNumberInPK="1"/>
+         <index name="PK_PSLP_D_TIPO_ENTE" unique="true">
+            <column ascending="true" name="COD_TIPO_ENTE"/>
+         </index>
+      </table>
+      <table name="PSLP_D_TIPO_EVENTO" numRows="97" remarks="" schema="PSLP" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="ID_TIPO_EVENTO" nullable="false" remarks="" size="22" type="NUMBER">
+            <child column="ID_TIPO_EVENTO" foreignKey="FK_PSLP_D_TIPO_EVENTO_01" implied="false" onDeleteCascade="false" table="PSLP_T_EVENTO"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="DESCR_TIPO_EVENTO" nullable="false" remarks="" size="100" type="VARCHAR2"/>
+         <primaryKey column="ID_TIPO_EVENTO" sequenceNumberInPK="1"/>
+         <index name="PK_PSLP_D_TIPO_EVENTO" unique="true">
+            <column ascending="true" name="ID_TIPO_EVENTO"/>
+         </index>
+      </table>
+      <table name="PSLP_D_TIPO_MESSAGGIO" numRows="15" remarks="" schema="PSLP" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="COD_TIPO_MESSAGGIO" nullable="false" remarks="" size="20" type="VARCHAR2">
+            <child column="COD_TIPO_MESSAGGIO" foreignKey="FK_PSLP_D_TIPO_MESSAGGIO_01" implied="false" onDeleteCascade="false" table="PSLP_D_MESSAGGIO"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="DESCR_TIPO_MESSAGGIO" nullable="false" remarks="" size="100" type="VARCHAR2"/>
+         <primaryKey column="COD_TIPO_MESSAGGIO" sequenceNumberInPK="1"/>
+         <index name="PK_PSLP_D_TIPO_MESSAGGIO" unique="true">
+            <column ascending="true" name="COD_TIPO_MESSAGGIO"/>
+         </index>
+      </table>
+      <table name="PSLP_D_TIPO_MESSAGGIO_CAL" numRows="2" remarks="" schema="PSLP" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="COD_TIPO_MESSAGGIO_CALEND" nullable="false" remarks="" size="3" type="VARCHAR2">
+            <child column="COD_TIPO_MESSAGGIO_CALEND" foreignKey="FK_PSLP_D_TIPO_MESSAGG_CAL_01" implied="false" onDeleteCascade="false" table="PSLP_T_MESSAGGIO_CALENDARIO"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="DESCR_TIPO_MESSAGGIO_CALEND" nullable="false" remarks="" size="100" type="VARCHAR2"/>
+         <primaryKey column="COD_TIPO_MESSAGGIO_CALEND" sequenceNumberInPK="1"/>
+         <index name="PK_PSLP_D_TIPO_MESSAGGIO_CAL" unique="true">
+            <column ascending="true" name="COD_TIPO_MESSAGGIO_CALEND"/>
+         </index>
+      </table>
+      <table name="PSLP_D_TIPO_RESPONSABILITA" numRows="3" remarks="" schema="PSLP" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="COD_TIPO_RESPONSABILITA" nullable="false" remarks="" size="4" type="VARCHAR2">
+            <child column="COD_TIPO_RESPONSABILITA" foreignKey="FK_PLSP_D_TIPO_RESPONSAB_01" implied="false" onDeleteCascade="false" table="PSLP_R_UTENTE"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="DESCR_TIPO_RESPONSABILITA" nullable="false" remarks="" size="100" type="VARCHAR2"/>
+         <primaryKey column="COD_TIPO_RESPONSABILITA" sequenceNumberInPK="1"/>
+         <index name="PK_PSLP_D_TIPO_RESPONSABILITA" unique="true">
+            <column ascending="true" name="COD_TIPO_RESPONSABILITA"/>
+         </index>
+      </table>
+      <table name="PSLP_D_TIPO_UTENTE" numRows="4" remarks="" schema="PSLP" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="COD_TIPO_UTENTE" nullable="false" remarks="" size="5" type="VARCHAR2">
+            <child column="COD_TIPO_UTENTE" foreignKey="FK_PSLP_D_TIPO_UTENTE_01" implied="false" onDeleteCascade="false" table="PSLP_T_UTENTE"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="DESCR_TIPO_UTENTE" nullable="false" remarks="" size="100" type="VARCHAR2"/>
+         <primaryKey column="COD_TIPO_UTENTE" sequenceNumberInPK="1"/>
+         <index name="PK_PSLP_D_TIPO_UTENTE" unique="true">
+            <column ascending="true" name="COD_TIPO_UTENTE"/>
+         </index>
+      </table>
+      <table name="PSLP_R_AMBITO_TIPO_DOC" numRows="7" remarks="" schema="PSLP" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="COD_AMBITO" nullable="false" remarks="" size="5" type="VARCHAR2">
+            <child column="COD_AMBITO" foreignKey="FK_PSLP_R_AMBITO_TIPO_DOC_01" implied="false" onDeleteCascade="false" table="PSLP_T_DOCUMENTO"/>
+            <parent column="COD_AMBITO" foreignKey="FK_PSLP_D_AMBITO_03" implied="false" onDeleteCascade="false" table="PSLP_D_AMBITO"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="COD_TIPO_DOCUMENTO" nullable="false" remarks="" size="4" type="VARCHAR2">
+            <child column="COD_TIPO_DOCUMENTO" foreignKey="FK_PSLP_R_AMBITO_TIPO_DOC_01" implied="false" onDeleteCascade="false" table="PSLP_T_DOCUMENTO"/>
+            <parent column="COD_TIPO_DOCUMENTO" foreignKey="FK_PSLP_D_TIPO_DOCUMENTO_01" implied="false" onDeleteCascade="false" table="PSLP_D_TIPO_DOCUMENTO"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="D_INIZIO" nullable="false" remarks="" size="7" type="DATE"/>
+         <column autoUpdated="false" digits="0" id="3" name="D_FINE" nullable="true" remarks="" size="7" type="DATE"/>
+         <primaryKey column="COD_AMBITO" sequenceNumberInPK="1"/>
+         <primaryKey column="COD_TIPO_DOCUMENTO" sequenceNumberInPK="2"/>
+         <index name="PK_PSLP_R_AMBITO_TIPO_DOC" unique="true">
+            <column ascending="true" name="COD_AMBITO"/>
+            <column ascending="true" name="COD_TIPO_DOCUMENTO"/>
+         </index>
+         <index name="IE_PSLP_R_AMBITO_TIPO_DOC_01" unique="false">
+            <column ascending="true" name="COD_TIPO_DOCUMENTO"/>
+         </index>
+      </table>
+      <table name="PSLP_R_PERIODO_GIORNO_SETT" numRows="646" remarks="" schema="PSLP" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="ID_PERIODO_GIORNO_SETT" nullable="false" remarks="" size="22" type="NUMBER"/>
+         <column autoUpdated="false" digits="0" id="1" name="ID_PERIODO" nullable="false" remarks="Rappresenta il giorno della settimana: 1 - Lunedì 2 - Martedì ..." size="22" type="NUMBER">
+            <parent column="ID_PERIODO" foreignKey="FK_PSLP_T_PERIODO_02" implied="false" onDeleteCascade="false" table="PSLP_T_PERIODO"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="ID_GIORNO_SETTIMANA" nullable="false" remarks="" size="22" type="NUMBER"/>
+         <column autoUpdated="false" digits="0" id="3" name="ORA_INIZIO" nullable="false" remarks="" size="22" type="NUMBER"/>
+         <column autoUpdated="false" digits="0" id="4" name="ORA_FINE" nullable="false" remarks="" size="22" type="NUMBER"/>
+         <column autoUpdated="false" digits="0" id="5" name="DURATA_SLOT" nullable="false" remarks="Durata dello slot espressa in minuti" size="22" type="NUMBER"/>
+         <column autoUpdated="false" digits="0" id="6" name="NUM_MAX_PRENOTAZIONI" nullable="false" remarks="" size="22" type="NUMBER"/>
+         <column autoUpdated="false" digits="0" id="7" name="COD_USER_INSERIM" nullable="false" remarks="" size="16" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="8" name="D_INSERIM" nullable="false" remarks="" size="7" type="DATE"/>
+         <column autoUpdated="false" digits="0" id="9" name="COD_USER_AGGIORN" nullable="false" remarks="" size="16" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="10" name="D_AGGIORN" nullable="false" remarks="" size="7" type="DATE"/>
+         <primaryKey column="ID_PERIODO_GIORNO_SETT" sequenceNumberInPK="1"/>
+         <index name="PK_PSLP_R_PERIODO_GIORNO_SETT" unique="true">
+            <column ascending="true" name="ID_PERIODO_GIORNO_SETT"/>
+         </index>
+         <index name="IE_PSLP_R_PER_GIORNO_SETT_01" unique="false">
+            <column ascending="true" name="ID_PERIODO"/>
+            <column ascending="true" name="ID_GIORNO_SETTIMANA"/>
+         </index>
+         <checkConstraint constraint="ID_GIORNO_SETTIMANA in (1, 2, 3, 4, 5, 6, 7)" name="CHK_PSLP_R_PER_GIORNO_SETT_01"/>
+      </table>
+      <table name="PSLP_R_TIPO_DOC_ESTENSIONE" numRows="41" remarks="" schema="PSLP" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="COD_TIPO_DOCUMENTO" nullable="false" remarks="" size="4" type="VARCHAR2">
+            <child column="COD_TIPO_DOCUMENTO" foreignKey="FK_PSLP_R_TIPO_DOC_ESTENS_01" implied="false" onDeleteCascade="false" table="PSLP_T_DOCUMENTO"/>
+            <parent column="COD_TIPO_DOCUMENTO" foreignKey="FK_PSLP_D_TIPO_DOCUMENTO_02" implied="false" onDeleteCascade="false" table="PSLP_D_TIPO_DOCUMENTO"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="COD_ESTENSIONE_DOC" nullable="false" remarks="" size="4" type="VARCHAR2">
+            <child column="COD_ESTENSIONE_DOC" foreignKey="FK_PSLP_R_TIPO_DOC_ESTENS_01" implied="false" onDeleteCascade="false" table="PSLP_T_DOCUMENTO"/>
+            <parent column="COD_ESTENSIONE_DOC" foreignKey="FK_PSLP_D_ESTENSIONE_DOC_01" implied="false" onDeleteCascade="false" table="PSLP_D_ESTENSIONE_DOC"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="D_INIZIO" nullable="false" remarks="" size="7" type="DATE"/>
+         <column autoUpdated="false" digits="0" id="3" name="D_FINE" nullable="true" remarks="" size="7" type="DATE"/>
+         <primaryKey column="COD_ESTENSIONE_DOC" sequenceNumberInPK="1"/>
+         <primaryKey column="COD_TIPO_DOCUMENTO" sequenceNumberInPK="2"/>
+         <index name="PK_PSLP_R_TIPO_DOC_ESTENSIONE" unique="true">
+            <column ascending="true" name="COD_TIPO_DOCUMENTO"/>
+            <column ascending="true" name="COD_ESTENSIONE_DOC"/>
+         </index>
+         <index name="IE_PSLP_R_TIPO_DOC_ESTENS_01" unique="false">
+            <column ascending="true" name="COD_ESTENSIONE_DOC"/>
+         </index>
+      </table>
+      <table name="PSLP_R_UTENTE" numRows="55" remarks="" schema="PSLP" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="ID_RESPONSABILE" nullable="false" remarks="" size="22" type="NUMBER">
+            <parent column="ID_UTENTE" foreignKey="FK_PSLP_T_UTENTE_01" implied="false" onDeleteCascade="false" table="PSLP_T_UTENTE"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="ID_TUTELATO" nullable="false" remarks="" size="22" type="NUMBER">
+            <parent column="ID_UTENTE" foreignKey="FK_PSLP_T_UTENTE_02" implied="false" onDeleteCascade="false" table="PSLP_T_UTENTE"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="COD_TIPO_RESPONSABILITA" nullable="false" remarks="" size="4" type="VARCHAR2">
+            <parent column="COD_TIPO_RESPONSABILITA" foreignKey="FK_PLSP_D_TIPO_RESPONSAB_01" implied="false" onDeleteCascade="false" table="PSLP_D_TIPO_RESPONSABILITA"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="3" name="D_PRESA_VISIONE_RESPONSABIL" nullable="true" remarks="" size="7" type="DATE"/>
+         <column autoUpdated="false" digits="0" id="4" name="COD_USER_INSERIM" nullable="false" remarks="" size="16" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="5" name="D_INSERIM" nullable="false" remarks="" size="7" type="DATE"/>
+         <column autoUpdated="false" digits="0" id="6" name="COD_USER_AGGIORN" nullable="false" remarks="" size="16" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="7" name="D_AGGIORN" nullable="false" remarks="" size="7" type="DATE"/>
+         <primaryKey column="ID_RESPONSABILE" sequenceNumberInPK="1"/>
+         <primaryKey column="ID_TUTELATO" sequenceNumberInPK="2"/>
+         <index name="PK_PSLP_R_UTENTE" unique="true">
+            <column ascending="true" name="ID_RESPONSABILE"/>
+            <column ascending="true" name="ID_TUTELATO"/>
+         </index>
+         <index name="IE_PSLP_R_UTENTE_01" unique="false">
+            <column ascending="true" name="ID_TUTELATO"/>
+         </index>
+         <index name="IE_PSLP_R_UTENTE_02" unique="false">
+            <column ascending="true" name="COD_TIPO_RESPONSABILITA"/>
+         </index>
+      </table>
+      <table name="PSLP_R_UTENTE_ENTE" numRows="6" remarks="" schema="PSLP" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="ID_UTENTE" nullable="false" remarks="" size="22" type="NUMBER">
+            <parent column="ID_UTENTE" foreignKey="FK_PSLP_T_UTENTE_03" implied="false" onDeleteCascade="false" table="PSLP_T_UTENTE"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="GRUPPO_OPERATORE" nullable="false" remarks="" size="1" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="2" name="COD_OPERATORE" nullable="false" remarks="" size="5" type="NUMBER"/>
+         <column autoUpdated="false" digits="0" id="3" name="SUBCODICE" nullable="false" remarks="" size="3" type="NUMBER"/>
+         <column autoUpdated="false" defaultValue="'N' " digits="0" id="4" name="FLG_UTENTE_MASTER" nullable="false" remarks="" size="1" type="VARCHAR2"/>
+         <primaryKey column="COD_OPERATORE" sequenceNumberInPK="1"/>
+         <primaryKey column="GRUPPO_OPERATORE" sequenceNumberInPK="2"/>
+         <primaryKey column="ID_UTENTE" sequenceNumberInPK="3"/>
+         <primaryKey column="SUBCODICE" sequenceNumberInPK="4"/>
+         <index name="PK_PSLP_R_UTENTE_ENTE" unique="true">
+            <column ascending="true" name="ID_UTENTE"/>
+            <column ascending="true" name="GRUPPO_OPERATORE"/>
+            <column ascending="true" name="COD_OPERATORE"/>
+            <column ascending="true" name="SUBCODICE"/>
+         </index>
+         <checkConstraint constraint="FLG_UTENTE_MASTER IN ('S', 'N')" name="CHK_PSLP_R_UTENTE_ENTE_01"/>
+      </table>
+      <table name="PSLP_T_CALENDARIO" numRows="129" remarks="" schema="PSLP" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="ID_CALENDARIO" nullable="false" remarks="" size="22" type="NUMBER">
+            <child column="ID_CALENDARIO" foreignKey="FK_PSLP_T_CALENDARIO_03" implied="false" onDeleteCascade="false" table="PSLP_T_MESSAGGIO_AGGIUNTIVO"/>
+            <child column="ID_CALENDARIO" foreignKey="FK_PSLP_T_CALENDARIO_02" implied="false" onDeleteCascade="false" table="PSLP_T_MESSAGGIO_CALENDARIO"/>
+            <child column="ID_CALENDARIO" foreignKey="FK_PSLP_T_CALENDARIO_01" implied="false" onDeleteCascade="false" table="PSLP_T_PERIODO"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="NOME" nullable="false" remarks="" size="200" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="2" name="GRUPPO_OPERATORE" nullable="false" remarks="Riferimento tecnico al calendario." size="1" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="3" name="COD_OPERATORE" nullable="false" remarks="Riferimento tecnico al calendario." size="5" type="NUMBER"/>
+         <column autoUpdated="false" digits="0" id="4" name="SUBCODICE" nullable="false" remarks="Riferimento tecnico al calendario." size="3" type="NUMBER"/>
+         <column autoUpdated="false" digits="0" id="5" name="COD_AMBITO" nullable="false" remarks="Indica a quale ambito il calendario appartiene." size="5" type="VARCHAR2">
+            <parent column="COD_AMBITO" foreignKey="FK_PSLP_D_AMBITO_02" implied="false" onDeleteCascade="false" table="PSLP_D_AMBITO"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="6" name="OGGETTO_CALENDARIO" nullable="true" remarks="Eventuale integrazione alla dicitura dell'Oggetto Mail" size="100" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="7" name="D_ANNULLAMENTO" nullable="true" remarks="" size="7" type="DATE"/>
+         <column autoUpdated="false" digits="0" id="8" name="ORE_INVIO_PROMEMORIA" nullable="true" remarks="Se e' valorizzato, indica quante ore prima dell'appuntamento deve essere inviata la mail di promemoria al Cittadino.&#10;Se non e' valorizzato, NON va inviata la mail.&#10;&#10;NB= Al momento, l'invio della mail avviene tramite una procedura massiva batch." size="22" type="NUMBER"/>
+         <column autoUpdated="false" defaultValue="'S' " digits="0" id="9" name="FLG_INVIO_CONFERMA_PRENOTAZ" nullable="false" remarks="Se vale 'S' (default), indica che viene inviata la mail per richiedere di prenotare l'appuntamento.&#10;Se non e' valorizzato o e' valorizzato a 'N', NON va inviata la mail." size="1" type="VARCHAR2"/>
+         <column autoUpdated="false" defaultValue="'D' " digits="0" id="10" name="FLG_VISIBILE_CPI" nullable="true" remarks="Se vale 'D' (default), il calendario e' visibile solo da cittadini Domiciliati nell'ambito del CpI.&#10;Se vale 'R', il calendario e' visibile solo da cittadini Residenti nell'ambito del CpI.&#10;Altrimenti, se vale 'T' il calendario, il calendario e' visibile per tutti, a prescindere da Domicilio e Residenza.&#10;&#10;NB= Il calendario viene individuato da GRUPPO_OPERATORE, COD_OPERATORE e SUBCODICE." size="1" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="11" name="ORE_LIMITE_SPOSTAMENTO" nullable="true" remarks="Se e' valorizzato, indica quante ore prima dell'appuntamento quest'ultimo puo essere spostato.&#10;Se non e' valorizzato, NON sara' possibile spostare l'appuntamento." size="22" type="NUMBER"/>
+         <column autoUpdated="false" digits="0" id="12" name="FLG_ANNULLA_GARANZIA_GIOVANI" nullable="true" remarks="Se vale 'S', indica che se il Cittadino disdice l'appuntamento per GG, si annulla l'adesione a GG in SILP, inviando opportuna mail al Cittadino di comunicazione evento.&#10;Se non e' valorizzato o e' valorizzato a 'N', NON si annulla l'adesione a GG in SILP." size="1" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="13" name="COD_USER_INSERIM" nullable="false" remarks="" size="16" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="14" name="D_INSERIM" nullable="false" remarks="" size="7" type="DATE"/>
+         <column autoUpdated="false" digits="0" id="15" name="COD_USER_AGGIORN" nullable="false" remarks="" size="16" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="16" name="D_AGGIORN" nullable="false" remarks="" size="7" type="DATE"/>
+         <column autoUpdated="false" digits="0" id="17" name="FLG_BLOCCATO" nullable="true" remarks="Se = 'S' non è possibile prenotare il calendario" size="1" type="VARCHAR2"/>
+         <primaryKey column="ID_CALENDARIO" sequenceNumberInPK="1"/>
+         <index name="PK_PSLP_T_CALENDARIO" unique="true">
+            <column ascending="true" name="ID_CALENDARIO"/>
+         </index>
+         <checkConstraint constraint="FLG_INVIO_CONFERMA_PRENOTAZ IN ('S', 'N')" name="CHK_PSLP_T_CALENDARIO_01"/>
+         <checkConstraint constraint="FLG_VISIBILE_CPI in ('D', 'R', 'T')" name="CHK_PSLP_T_CALENDARIO_02"/>
+         <checkConstraint constraint="FLG_ANNULLA_GARANZIA_GIOVANI = 'S'" name="CHK_PSLP_T_CALENDARIO_03"/>
+         <checkConstraint constraint="NOT (FLG_ANNULLA_GARANZIA_GIOVANI IS NOT NULL AND COD_AMBITO &lt;&gt; 'GG')" name="CHK_PSLP_T_CALENDARIO_04"/>
+         <checkConstraint constraint="FLG_BLOCCATO = 'S'" name="CHK_PSLP_T_CALENDARIO_05"/>
+      </table>
+      <table name="PSLP_T_DOCUMENTO" numRows="50" remarks="" schema="PSLP" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="ID_DOCUMENTO" nullable="false" remarks="" size="22" type="NUMBER"/>
+         <column autoUpdated="false" digits="0" id="1" name="NOME_DOCUMENTO" nullable="false" remarks="" size="200" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="2" name="COD_AMBITO" nullable="false" remarks="" size="5" type="VARCHAR2">
+            <parent column="COD_AMBITO" foreignKey="FK_PSLP_R_AMBITO_TIPO_DOC_01" implied="false" onDeleteCascade="false" table="PSLP_R_AMBITO_TIPO_DOC"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="3" name="COD_TIPO_DOCUMENTO" nullable="false" remarks="" size="4" type="VARCHAR2">
+            <parent column="COD_TIPO_DOCUMENTO" foreignKey="FK_PSLP_R_TIPO_DOC_ESTENS_01" implied="false" onDeleteCascade="false" table="PSLP_R_TIPO_DOC_ESTENSIONE"/>
+            <parent column="COD_TIPO_DOCUMENTO" foreignKey="FK_PSLP_R_AMBITO_TIPO_DOC_01" implied="false" onDeleteCascade="false" table="PSLP_R_AMBITO_TIPO_DOC"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="4" name="COD_ESTENSIONE_DOC" nullable="false" remarks="" size="4" type="VARCHAR2">
+            <parent column="COD_ESTENSIONE_DOC" foreignKey="FK_PSLP_R_TIPO_DOC_ESTENS_01" implied="false" onDeleteCascade="false" table="PSLP_R_TIPO_DOC_ESTENSIONE"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="5" name="COD_STATO_DOCUMENTO" nullable="false" remarks="" size="2" type="VARCHAR2">
+            <parent column="COD_STATO_DOCUMENTO" foreignKey="FK_PSLP_D_STATO_DOCUMENTO_01" implied="false" onDeleteCascade="false" table="PSLP_D_STATO_DOCUMENTO"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="6" name="ID_UTENTE" nullable="false" remarks="" size="22" type="NUMBER">
+            <parent column="ID_UTENTE" foreignKey="FK_PSLP_T_UTENTE_08" implied="false" onDeleteCascade="false" table="PSLP_T_UTENTE"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="7" name="D_INSERIMENTO" nullable="false" remarks="" size="7" type="DATE"/>
+         <column autoUpdated="false" digits="0" id="8" name="D_INVIO" nullable="true" remarks="Data di invio al CPI" size="7" type="DATE"/>
+         <column autoUpdated="false" digits="0" id="9" name="DOCUMENTO" nullable="true" remarks="" size="4000" type="BLOB"/>
+         <column autoUpdated="false" digits="0" id="10" name="NOTE_CITTADINO" nullable="true" remarks="" size="4000" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="11" name="NOTE_OPERATORE" nullable="true" remarks="" size="4000" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="12" name="CF_OPERATORE" nullable="true" remarks="Operatore che ha accettato o rifiutato il documento" size="16" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="13" name="GRUPPO_OPERATORE" nullable="true" remarks="Operatore che ha accettato o rifiutato il documento" size="1" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="14" name="COD_OPERATORE" nullable="true" remarks="Operatore che ha accettato o rifiutato il documento" size="5" type="NUMBER"/>
+         <column autoUpdated="false" digits="0" id="15" name="SUBCODICE" nullable="true" remarks="Operatore che ha accettato o rifiutato il documento" size="3" type="NUMBER"/>
+         <column autoUpdated="false" digits="0" id="16" name="COD_USER_INSERIM" nullable="false" remarks="" size="16" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="17" name="D_INSERIM" nullable="false" remarks="" size="7" type="DATE"/>
+         <column autoUpdated="false" digits="0" id="18" name="COD_USER_AGGIORN" nullable="false" remarks="" size="16" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="19" name="D_AGGIORN" nullable="false" remarks="" size="7" type="DATE"/>
+         <primaryKey column="ID_DOCUMENTO" sequenceNumberInPK="1"/>
+         <index name="PK_PSLP_T_DOCUMENTO" unique="true">
+            <column ascending="true" name="ID_DOCUMENTO"/>
+         </index>
+         <index name="IE_PSLP_T_DOCUMENTO_01" unique="false">
+            <column ascending="true" name="COD_AMBITO"/>
+            <column ascending="true" name="COD_TIPO_DOCUMENTO"/>
+         </index>
+         <index name="IE_PSLP_T_DOCUMENTO_02" unique="false">
+            <column ascending="true" name="COD_TIPO_DOCUMENTO"/>
+         </index>
+         <index name="IE_PSLP_T_DOCUMENTO_03" unique="false">
+            <column ascending="true" name="COD_STATO_DOCUMENTO"/>
+         </index>
+         <index name="IE_PSLP_T_DOCUMENTO_04" unique="false">
+            <column ascending="true" name="ID_UTENTE"/>
+         </index>
+         <index name="IE_PSLP_T_DOCUMENTO_05" unique="false">
+            <column ascending="true" name="CF_OPERATORE"/>
+            <column ascending="true" name="GRUPPO_OPERATORE"/>
+            <column ascending="true" name="COD_OPERATORE"/>
+            <column ascending="true" name="SUBCODICE"/>
+         </index>
+         <index name="IE_PSLP_T_DOCUMENTO_06" unique="false">
+            <column ascending="true" name="COD_TIPO_DOCUMENTO"/>
+            <column ascending="true" name="COD_ESTENSIONE_DOC"/>
+         </index>
+         <index name="IE_PSLP_T_DOCUMENTO_07" unique="false">
+            <column ascending="true" name="COD_ESTENSIONE_DOC"/>
+         </index>
+         <checkConstraint constraint="(CF_OPERATORE is null and GRUPPO_OPERATORE is null and COD_OPERATORE is null and SUBCODICE is null) or (CF_OPERATORE is not null and GRUPPO_OPERATORE is not null and COD_OPERATORE is not null and SUBCODICE is not null)" name="CHK_PSLP_T_DOCUMENTO_01"/>
+      </table>
+      <table name="PSLP_T_ECCEZIONE" numRows="645" remarks="" schema="PSLP" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="ID_ECCEZIONE" nullable="false" remarks="" size="22" type="NUMBER"/>
+         <column autoUpdated="false" digits="0" id="1" name="ID_PERIODO" nullable="false" remarks="" size="22" type="NUMBER">
+            <parent column="ID_PERIODO" foreignKey="FK_PSLP_T_PERIODO_03" implied="false" onDeleteCascade="false" table="PSLP_T_PERIODO"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="GIORNO" nullable="false" remarks="" size="7" type="DATE"/>
+         <column autoUpdated="false" digits="0" id="3" name="ORA_INIZIO" nullable="true" remarks="" size="22" type="NUMBER"/>
+         <column autoUpdated="false" digits="0" id="4" name="ORA_FINE" nullable="true" remarks="" size="22" type="NUMBER"/>
+         <column autoUpdated="false" digits="0" id="5" name="NUM_MAX_PRENOTAZIONI" nullable="false" remarks="" size="22" type="NUMBER"/>
+         <column autoUpdated="false" digits="0" id="6" name="FLG_ELABORATA" nullable="true" remarks="" size="1" type="VARCHAR2"/>
+         <primaryKey column="ID_ECCEZIONE" sequenceNumberInPK="1"/>
+         <index name="PK_PSLP_T_ECCEZIONE" unique="true">
+            <column ascending="true" name="ID_ECCEZIONE"/>
+         </index>
+         <index name="IE_PSLP_T_ECCEZIONE_01" unique="false">
+            <column ascending="true" name="ID_PERIODO"/>
+         </index>
+         <checkConstraint constraint="(ORA_INIZIO IS NULL AND ORA_FINE IS NULL) OR (ORA_INIZIO IS NOT NULL AND ORA_FINE IS NOT NULL)" name="CHK_PSLP_T_ECCEZIONE_01"/>
+         <checkConstraint constraint="FLG_ELABORATA = 'S'" name="CHK_PSLP_T_ECCEZIONE_02"/>
+      </table>
+      <table name="PSLP_T_EVENTO" numRows="17585" remarks="" schema="PSLP" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="ID_EVENTO" nullable="false" remarks="" size="22" type="NUMBER">
+            <child column="ID_EVENTO" foreignKey="FK_PSLP_T_EVENTO_01" implied="false" onDeleteCascade="false" table="PSLP_T_MESSAGGIO_UTENTE"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="ID_UTENTE" nullable="true" remarks="" size="22" type="NUMBER">
+            <parent column="ID_UTENTE" foreignKey="FK_PSLP_T_UTENTE_04" implied="false" onDeleteCascade="false" table="PSLP_T_UTENTE"/>
+         </column>
+         <column autoUpdated="false" digits="6" id="2" name="D_EVENTO" nullable="false" remarks="" size="11" type="TIMESTAMP(6)"/>
+         <column autoUpdated="false" digits="0" id="3" name="ID_TIPO_EVENTO" nullable="false" remarks="" size="22" type="NUMBER">
+            <parent column="ID_TIPO_EVENTO" foreignKey="FK_PSLP_D_TIPO_EVENTO_01" implied="false" onDeleteCascade="false" table="PSLP_D_TIPO_EVENTO"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="4" name="IP_CHIAMANTE" nullable="true" remarks="Indirizzo IP del chiamante" size="40" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="5" name="COD_ESITO" nullable="true" remarks="" size="2" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="6" name="NOTE" nullable="true" remarks="" size="4000" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="7" name="COD_USER_INSERIM" nullable="false" remarks="" size="16" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="8" name="D_INSERIM" nullable="false" remarks="" size="7" type="DATE"/>
+         <column autoUpdated="false" digits="0" id="9" name="COD_USER_AGGIORN" nullable="false" remarks="" size="16" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="10" name="D_AGGIORN" nullable="false" remarks="" size="7" type="DATE"/>
+         <primaryKey column="ID_EVENTO" sequenceNumberInPK="1"/>
+         <index name="PK_PSLP_T_EVENTO" unique="true">
+            <column ascending="true" name="ID_EVENTO"/>
+         </index>
+         <index name="IE_PSLP_T_EVENTO_01" unique="false">
+            <column ascending="true" name="ID_UTENTE"/>
+         </index>
+         <index name="IE_PSLP_T_EVENTO_02" unique="false">
+            <column ascending="true" name="ID_TIPO_EVENTO"/>
+         </index>
+         <index name="IE_PSLP_T_EVENTO_03" unique="false">
+            <column ascending="true" name="COD_ESITO"/>
+         </index>
+         <index name="IE_PSLP_T_EVENTO_04" unique="false">
+            <column ascending="true" name="D_EVENTO"/>
+         </index>
+         <checkConstraint constraint="COD_ESITO IN ('OK', 'KO')" name="CHK_PSLP_T_EVENTO_01"/>
+      </table>
+      <table name="PSLP_T_GIORNO" numRows="7434" remarks="" schema="PSLP" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="ID_GIORNO" nullable="false" remarks="" size="22" type="NUMBER">
+            <child column="ID_GIORNO" foreignKey="FK_PSLP_T_GIORNO_01" implied="false" onDeleteCascade="false" table="PSLP_T_SLOT"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="ID_PERIODO" nullable="false" remarks="" size="22" type="NUMBER">
+            <parent column="ID_PERIODO" foreignKey="FK_PSLP_T_PERIODO_01" implied="false" onDeleteCascade="false" table="PSLP_T_PERIODO"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="GIORNO" nullable="false" remarks="" size="7" type="DATE"/>
+         <column autoUpdated="false" digits="0" id="3" name="COD_USER_INSERIM" nullable="false" remarks="" size="16" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="4" name="D_INSERIM" nullable="false" remarks="" size="7" type="DATE"/>
+         <column autoUpdated="false" digits="0" id="5" name="COD_USER_AGGIORN" nullable="false" remarks="" size="16" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="6" name="D_AGGIORN" nullable="false" remarks="" size="7" type="DATE"/>
+         <primaryKey column="ID_GIORNO" sequenceNumberInPK="1"/>
+         <index name="PK_PSLP_T_GIORNO" unique="true">
+            <column ascending="true" name="ID_GIORNO"/>
+         </index>
+         <index name="IE_PSLP_T_GIORNO_01" unique="false">
+            <column ascending="true" name="ID_PERIODO"/>
+         </index>
+      </table>
+      <table name="PSLP_T_MESSAGGIO_AGGIUNTIVO" numRows="74" remarks="" schema="PSLP" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="ID_MESSAGGIO_AGGIUNTIVO" nullable="false" remarks="" size="22" type="NUMBER"/>
+         <column autoUpdated="false" digits="0" id="1" name="ID_MESSAGGIO" nullable="false" remarks="" size="22" type="NUMBER">
+            <parent column="ID_MESSAGGIO" foreignKey="FK_PSLP_D_MESSAGGIO_01" implied="false" onDeleteCascade="false" table="PSLP_D_MESSAGGIO"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="ID_CALENDARIO" nullable="true" remarks="" size="22" type="NUMBER">
+            <parent column="ID_CALENDARIO" foreignKey="FK_PSLP_T_CALENDARIO_03" implied="false" onDeleteCascade="false" table="PSLP_T_CALENDARIO"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="3" name="GRUPPO_OPERATORE" nullable="true" remarks="" size="1" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="4" name="COD_OPERATORE" nullable="true" remarks="" size="5" type="NUMBER"/>
+         <column autoUpdated="false" digits="0" id="5" name="SUBCODICE" nullable="true" remarks="" size="3" type="NUMBER"/>
+         <column autoUpdated="false" digits="0" id="6" name="TESTO" nullable="false" remarks="" size="4000" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="7" name="COD_USER_INSERIM" nullable="false" remarks="" size="16" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="8" name="D_INSERIM" nullable="false" remarks="" size="7" type="DATE"/>
+         <column autoUpdated="false" digits="0" id="9" name="COD_USER_AGGIORN" nullable="false" remarks="" size="16" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="10" name="D_AGGIORN" nullable="false" remarks="" size="7" type="DATE"/>
+         <primaryKey column="ID_MESSAGGIO_AGGIUNTIVO" sequenceNumberInPK="1"/>
+         <index name="PK_PSLP_T_MESSAGGIO_AGGIUNTIVO" unique="true">
+            <column ascending="true" name="ID_MESSAGGIO_AGGIUNTIVO"/>
+         </index>
+         <index name="IE_PSLP_T_MESSAGGIO_AGGIUN_01" unique="false">
+            <column ascending="true" name="ID_MESSAGGIO"/>
+         </index>
+         <index name="IE_PSLP_T_MESSAGGIO_AGGIUN_02" unique="false">
+            <column ascending="true" name="ID_CALENDARIO"/>
+         </index>
+         <index name="IE_PSLP_T_MESSAGGIO_AGGIUN_03" unique="false">
+            <column ascending="true" name="GRUPPO_OPERATORE"/>
+            <column ascending="true" name="COD_OPERATORE"/>
+            <column ascending="true" name="SUBCODICE"/>
+         </index>
+         <checkConstraint constraint="(GRUPPO_OPERATORE IS NULL AND COD_OPERATORE IS NULL AND SUBCODICE IS NULL) OR (GRUPPO_OPERATORE IS NOT NULL AND COD_OPERATORE IS NOT NULL AND SUBCODICE IS NOT NULL)" name="CHK_PSLP_T_MESSAGGIO_AGGIUN_01"/>
+         <checkConstraint constraint="NOT (ID_CALENDARIO IS NOT NULL AND GRUPPO_OPERATORE IS NOT NULL)" name="CHK_PSLP_T_MESSAGGIO_AGGIUN_02"/>
+      </table>
+      <table name="PSLP_T_MESSAGGIO_CALENDARIO" numRows="22" remarks="" schema="PSLP" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="ID_MESSAGGIO_CALENDARIO" nullable="false" remarks="" size="22" type="NUMBER"/>
+         <column autoUpdated="false" digits="0" id="1" name="ID_CALENDARIO" nullable="false" remarks="" size="22" type="NUMBER">
+            <parent column="ID_CALENDARIO" foreignKey="FK_PSLP_T_CALENDARIO_02" implied="false" onDeleteCascade="false" table="PSLP_T_CALENDARIO"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="COD_TIPO_MESSAGGIO_CALEND" nullable="false" remarks="" size="3" type="VARCHAR2">
+            <parent column="COD_TIPO_MESSAGGIO_CALEND" foreignKey="FK_PSLP_D_TIPO_MESSAGG_CAL_01" implied="false" onDeleteCascade="false" table="PSLP_D_TIPO_MESSAGGIO_CAL"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="3" name="TESTO" nullable="false" remarks="" size="4000" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="4" name="COD_USER_INSERIM" nullable="false" remarks="" size="16" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="5" name="D_INSERIM" nullable="false" remarks="" size="7" type="DATE"/>
+         <column autoUpdated="false" digits="0" id="6" name="COD_USER_AGGIORN" nullable="false" remarks="" size="16" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="7" name="D_AGGIORN" nullable="false" remarks="" size="7" type="DATE"/>
+         <primaryKey column="ID_MESSAGGIO_CALENDARIO" sequenceNumberInPK="1"/>
+         <index name="PK_PSLP_T_MESSAGGIO_CALENDARIO" unique="true">
+            <column ascending="true" name="ID_MESSAGGIO_CALENDARIO"/>
+         </index>
+         <index name="AK_PSLP_T_MESSAGGIO_CALEND_01" unique="true">
+            <column ascending="true" name="ID_CALENDARIO"/>
+            <column ascending="true" name="COD_TIPO_MESSAGGIO_CALEND"/>
+         </index>
+         <index name="IE_PSLP_T_MESSAGGIO_CALEND_01" unique="false">
+            <column ascending="true" name="COD_TIPO_MESSAGGIO_CALEND"/>
+         </index>
+      </table>
+      <table name="PSLP_T_MESSAGGIO_UTENTE" numRows="904" remarks="" schema="PSLP" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="ID_MESSAGGIO_UTENTE" nullable="false" remarks="" size="22" type="NUMBER"/>
+         <column autoUpdated="false" digits="0" id="1" name="ID_EVENTO" nullable="false" remarks="Valorizzato nel caso di email inviata a fronte di un evento generato dalla piattaforma (es. registrazione utente) - Il campo ID_UTENTE sara nullo e l'utente e' recuperabile passando dall'evento" size="22" type="NUMBER">
+            <parent column="ID_EVENTO" foreignKey="FK_PSLP_T_EVENTO_01" implied="false" onDeleteCascade="false" table="PSLP_T_EVENTO"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="ID_MESSAGGIO" nullable="true" remarks="Indica la tipologia di mail inviata" size="22" type="NUMBER">
+            <parent column="ID_MESSAGGIO" foreignKey="FK_PSLP_D_MESSAGGIO_02" implied="false" onDeleteCascade="false" table="PSLP_D_MESSAGGIO"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="3" name="ID_SIL_RIF_AMBITO" nullable="true" remarks="ID di riferimento alla Misura dell'Ambito valorizzato in SILP, a cui si lega la prenotazione dell'appuntamento. Utile anche per riportare il valore nelle mail e nella stampa." size="22" type="NUMBER"/>
+         <column autoUpdated="false" digits="0" id="4" name="EMAIL_MITTENTE" nullable="true" remarks="" size="256" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="5" name="EMAIL_DESTINATARIO" nullable="true" remarks="" size="256" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="6" id="6" name="D_INVIO" nullable="true" remarks="" size="11" type="TIMESTAMP(6)"/>
+         <column autoUpdated="false" digits="0" id="7" name="OGGETTO" nullable="false" remarks="" size="200" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="8" name="TESTO" nullable="true" remarks="" size="4000" type="CLOB"/>
+         <column autoUpdated="false" digits="0" id="9" name="FLG_LETTO" nullable="true" remarks="" size="1" type="VARCHAR2"/>
+         <primaryKey column="ID_MESSAGGIO_UTENTE" sequenceNumberInPK="1"/>
+         <index name="PK_PSLP_T_MESSAGGIO_UTENTE" unique="true">
+            <column ascending="true" name="ID_MESSAGGIO_UTENTE"/>
+         </index>
+         <index name="IE_PSLP_T_MESSAGGIO_UTENTE_01" unique="false">
+            <column ascending="true" name="ID_MESSAGGIO"/>
+         </index>
+         <index name="IE_PSLP_T_MESSAGGIO_UTENTE_02" unique="false">
+            <column ascending="true" name="ID_EVENTO"/>
+         </index>
+         <index name="IE_PSLP_T_MESSAGGIO_UTENTE_03" unique="false">
+            <column ascending="true" name="ID_SIL_RIF_AMBITO"/>
+         </index>
+         <checkConstraint constraint="FLG_LETTO = 'S'" name="CHK_PSLP_T_MESSAGGIO_UTENTE_01"/>
+      </table>
+      <table name="PSLP_T_PERIODO" numRows="173" remarks="" schema="PSLP" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="ID_PERIODO" nullable="false" remarks="" size="22" type="NUMBER">
+            <child column="ID_PERIODO" foreignKey="FK_PSLP_T_PERIODO_02" implied="false" onDeleteCascade="false" table="PSLP_R_PERIODO_GIORNO_SETT"/>
+            <child column="ID_PERIODO" foreignKey="FK_PSLP_T_PERIODO_03" implied="false" onDeleteCascade="false" table="PSLP_T_ECCEZIONE"/>
+            <child column="ID_PERIODO" foreignKey="FK_PSLP_T_PERIODO_01" implied="false" onDeleteCascade="false" table="PSLP_T_GIORNO"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="ID_CALENDARIO" nullable="false" remarks="" size="22" type="NUMBER">
+            <parent column="ID_CALENDARIO" foreignKey="FK_PSLP_T_CALENDARIO_01" implied="false" onDeleteCascade="false" table="PSLP_T_CALENDARIO"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="DT_INIZIO" nullable="false" remarks="" size="7" type="DATE"/>
+         <column autoUpdated="false" digits="0" id="3" name="DT_FINE" nullable="false" remarks="" size="7" type="DATE"/>
+         <column autoUpdated="false" digits="0" id="4" name="COD_USER_INSERIM" nullable="false" remarks="" size="16" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="5" name="D_INSERIM" nullable="false" remarks="" size="7" type="DATE"/>
+         <column autoUpdated="false" digits="0" id="6" name="COD_USER_AGGIORN" nullable="false" remarks="" size="16" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="7" name="D_AGGIORN" nullable="false" remarks="" size="7" type="DATE"/>
+         <primaryKey column="ID_PERIODO" sequenceNumberInPK="1"/>
+         <index name="PK_PSLP_T_PERIODO" unique="true">
+            <column ascending="true" name="ID_PERIODO"/>
+         </index>
+         <index name="IE_PSLP_T_PERIODO_01" unique="false">
+            <column ascending="true" name="ID_CALENDARIO"/>
+         </index>
+      </table>
+      <table name="PSLP_T_PRENOTAZIONE" numRows="494" remarks="" schema="PSLP" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="ID_PRENOTAZIONE" nullable="false" remarks="" size="22" type="NUMBER"/>
+         <column autoUpdated="false" digits="0" id="1" name="ID_SLOT" nullable="false" remarks="" size="22" type="NUMBER">
+            <parent column="ID_SLOT" foreignKey="FK_PSLP_T_SLOT_01" implied="false" onDeleteCascade="false" table="PSLP_T_SLOT"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="ID_UTENTE" nullable="false" remarks="" size="22" type="NUMBER">
+            <parent column="ID_UTENTE" foreignKey="FK_PSLP_T_UTENTE_06" implied="false" onDeleteCascade="false" table="PSLP_T_UTENTE"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="3" name="GRUPPO_OPERATORE" nullable="true" remarks="Eventuale gestore che ha inserito/modificato una prenotazione per un cittadino" size="1" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="4" name="COD_OPERATORE" nullable="true" remarks="Eventuale gestore che ha inserito/modificato una prenotazione per un cittadino" size="5" type="NUMBER"/>
+         <column autoUpdated="false" digits="0" id="5" name="SUBCODICE" nullable="true" remarks="Eventuale gestore che ha inserito/modificato una prenotazione per un cittadino" size="3" type="NUMBER"/>
+         <column autoUpdated="false" digits="0" id="6" name="COD_ANPAL_STATO_INCON" nullable="false" remarks="Fa riferimento al COD_ANPAL della SIL_T_STATO_INCON di SILP; il dato viene fornito da SILP tramite un web service e i valori possibili sono un sottoinsieme di tutti i valori previsti dalla SIL_T_STATO_INCON (quelli con FLG_PSLP = 'S')" size="3" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="7" name="NOTE" nullable="true" remarks="" size="4000" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="8" name="ID_SIL_IN_CONTATTO" nullable="true" remarks="ID della prenotazione appuntamento su SILP, utile per il Servizio di allineamento PSLP vs SILP" size="22" type="NUMBER"/>
+         <column autoUpdated="false" digits="0" id="9" name="ID_SIL_RIF_AMBITO" nullable="true" remarks="ID di riferimento alla Misura dell'Ambito valorizzato in SILP, a cui si lega la prenotazione dell'appuntamento. Utile anche per riportare il valore nelle mail e nella stampa." size="22" type="NUMBER"/>
+         <column autoUpdated="false" digits="0" id="10" name="FLG_INVIATO_PROMEMORIA" nullable="true" remarks="Indica se per la prenotazione è già stata inviata la mail per ricordare all'utente di presentarsi all'incontro" size="1" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="11" name="COD_USER_INSERIM" nullable="false" remarks="" size="16" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="12" name="D_INSERIM" nullable="false" remarks="" size="7" type="DATE"/>
+         <column autoUpdated="false" digits="0" id="13" name="COD_USER_AGGIORN" nullable="false" remarks="" size="16" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="14" name="D_AGGIORN" nullable="false" remarks="" size="7" type="DATE"/>
+         <primaryKey column="ID_PRENOTAZIONE" sequenceNumberInPK="1"/>
+         <index name="PK_PSLP_T_PRENOTAZIONE" unique="true">
+            <column ascending="true" name="ID_PRENOTAZIONE"/>
+         </index>
+         <index name="IE_PSLP_T_PRENOTAZIONE_01" unique="false">
+            <column ascending="true" name="ID_SLOT"/>
+         </index>
+         <index name="IE_PSLP_T_PRENOTAZIONE_02" unique="false">
+            <column ascending="true" name="ID_UTENTE"/>
+         </index>
+         <index name="IE_PSLP_T_PRENOTAZIONE_03" unique="false">
+            <column ascending="true" name="GRUPPO_OPERATORE"/>
+            <column ascending="true" name="COD_OPERATORE"/>
+            <column ascending="true" name="SUBCODICE"/>
+         </index>
+         <index name="IE_PSLP_T_PRENOTAZIONE_04" unique="false">
+            <column ascending="true" name="COD_ANPAL_STATO_INCON"/>
+         </index>
+         <index name="IE_PSLP_T_PRENOTAZIONE_05" unique="false">
+            <column ascending="true" name="ID_SIL_IN_CONTATTO"/>
+         </index>
+         <index name="IE_PSLP_T_PRENOTAZIONE_06" unique="false">
+            <column ascending="true" name="ID_SIL_RIF_AMBITO"/>
+         </index>
+         <checkConstraint constraint="(GRUPPO_OPERATORE IS NULL AND COD_OPERATORE IS NULL AND SUBCODICE IS NULL) OR (GRUPPO_OPERATORE IS NOT NULL AND COD_OPERATORE IS NOT NULL AND SUBCODICE IS NOT NULL)" name="CHK_PSLP_T_PRENOTAZIONE_01"/>
+         <checkConstraint constraint="FLG_INVIATO_PROMEMORIA = 'S'" name="CHK_PSLP_T_PRENOTAZIONE_02"/>
+      </table>
+      <table name="PSLP_T_RESPONSABILE" numRows="19" remarks="" schema="PSLP" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="ID_RESPONSABILE" nullable="false" remarks="" size="22" type="NUMBER">
+            <parent column="ID_UTENTE" foreignKey="FK_PSLP_T_UTENTE_07" implied="false" onDeleteCascade="false" table="PSLP_T_UTENTE"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="GENERE" nullable="true" remarks="" size="1" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="2" name="D_NASCITA" nullable="true" remarks="" size="7" type="DATE"/>
+         <column autoUpdated="false" digits="0" id="3" name="ID_SIL_T_COMUNE_NASC" nullable="true" remarks="Fa riferimento al campo SIL_T_COMUNE.ID_SIL_T_COMUNE di SILP" size="4" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="4" name="ID_SIL_T_NAZIONE_NASC" nullable="true" remarks="Fa riferimento al campo SIL_T_NAZIONE.ID_SIL_T_NAZIONE di SILP" size="4" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="5" name="ID_SIL_T_CITTADINANZA" nullable="true" remarks="Fa riferimento al campo SIL_T_CITTADINANZA.ID_SIL_T_CITTADINANZA di SILP" size="3" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="6" name="ID_SIL_T_STATUS_LAV_EXTRA_UE" nullable="true" remarks="Indica il titolo di soggiorno; corrisponde alla chiave della tabella SIL_T_STATUS_LAV_EXTRA_UE di SILP" size="5" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="7" name="NUMERO_PERM_SOGG" nullable="true" remarks="" size="15" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="8" name="D_SCADENZA_PERM_SOGG" nullable="true" remarks="" size="7" type="DATE"/>
+         <column autoUpdated="false" digits="0" id="9" name="ID_SIL_T_MOT_RIL_PERM" nullable="true" remarks="" size="5" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="10" name="ID_SIL_T_TOPONIMO_RES" nullable="true" remarks="" size="3" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="11" name="DS_INDIRIZZO_RES" nullable="true" remarks="" size="100" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="12" name="DS_NUM_CIVICO_RES" nullable="true" remarks="" size="15" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="13" name="DS_INDIRIZZO_RES_ESTESO" nullable="true" remarks="" size="200" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="14" name="ID_SIL_T_PROVINCIA_RES" nullable="true" remarks="" size="3" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="15" name="ID_SIL_T_COMUNE_RES" nullable="true" remarks="" size="4" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="16" name="CAP_RES" nullable="true" remarks="" size="5" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="17" name="ID_SIL_T_NAZIONE_RES" nullable="true" remarks="" size="4" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="18" name="ID_SIL_T_TOPONIMO_DOM" nullable="true" remarks="" size="3" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="19" name="DS_INDIRIZZO_DOM" nullable="true" remarks="" size="100" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="20" name="DS_NUM_CIVICO_DOM" nullable="true" remarks="" size="15" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="21" name="DS_INDIRIZZO_DOM_ESTESO" nullable="true" remarks="" size="200" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="22" name="ID_SIL_T_PROVINCIA_DOM" nullable="true" remarks="" size="3" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="23" name="ID_SIL_T_COMUNE_DOM" nullable="true" remarks="" size="4" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="24" name="CAP_DOM" nullable="true" remarks="" size="5" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="25" name="ID_SIL_T_NAZIONE_DOM" nullable="true" remarks="" size="4" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="26" name="DS_TELEFONO_FISSO" nullable="true" remarks="" size="25" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="27" name="DS_TELEFONO_CELLULARE" nullable="true" remarks="" size="25" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="28" name="DS_FAX" nullable="true" remarks="" size="25" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="29" name="COD_USER_INSERIM" nullable="false" remarks="" size="16" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="30" name="D_INSERIM" nullable="false" remarks="" size="7" type="DATE"/>
+         <column autoUpdated="false" digits="0" id="31" name="COD_USER_AGGIORN" nullable="false" remarks="" size="16" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="32" name="D_AGGIORN" nullable="false" remarks="" size="7" type="DATE"/>
+         <primaryKey column="ID_RESPONSABILE" sequenceNumberInPK="1"/>
+         <index name="PK_PSLP_T_RESPONSABILE" unique="true">
+            <column ascending="true" name="ID_RESPONSABILE"/>
+         </index>
+         <checkConstraint constraint="GENERE IN ('M', 'F')" name="CHK_PSLP_T_RESPONSABILE_01"/>
+         <checkConstraint constraint="not (ID_SIL_T_COMUNE_NASC is not null and ID_SIL_T_NAZIONE_NASC is not null)" name="CHK_PSLP_T_RESPONSABILE_02"/>
+      </table>
+      <table name="PSLP_T_SLOT" numRows="18694" remarks="" schema="PSLP" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="ID_SLOT" nullable="false" remarks="" size="22" type="NUMBER">
+            <child column="ID_SLOT" foreignKey="FK_PSLP_T_SLOT_01" implied="false" onDeleteCascade="false" table="PSLP_T_PRENOTAZIONE"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="ID_GIORNO" nullable="false" remarks="" size="22" type="NUMBER">
+            <parent column="ID_GIORNO" foreignKey="FK_PSLP_T_GIORNO_01" implied="false" onDeleteCascade="false" table="PSLP_T_GIORNO"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="ORA_INIZIO" nullable="false" remarks="" size="22" type="NUMBER"/>
+         <column autoUpdated="false" digits="0" id="3" name="ORA_FINE" nullable="false" remarks="" size="22" type="NUMBER"/>
+         <column autoUpdated="false" digits="0" id="4" name="NUM_MAX_PRENOTAZIONI" nullable="false" remarks="" size="22" type="NUMBER"/>
+         <column autoUpdated="false" defaultValue="0 " digits="0" id="5" name="NUM_PRENOTAZIONI_VALIDE" nullable="false" remarks="" size="22" type="NUMBER"/>
+         <column autoUpdated="false" digits="0" id="6" name="FLG_ECCEZIONE" nullable="true" remarks="Se vale 'S', indica uno slot aggiunto o modificato &quot;manualmente&quot; da un operatore andando in eccezione rispetto alla configurazione iniziale" size="1" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="7" name="COD_USER_INSERIM" nullable="false" remarks="" size="16" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="8" name="D_INSERIM" nullable="false" remarks="" size="7" type="DATE"/>
+         <column autoUpdated="false" digits="0" id="9" name="COD_USER_AGGIORN" nullable="false" remarks="" size="16" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="10" name="D_AGGIORN" nullable="false" remarks="" size="7" type="DATE"/>
+         <primaryKey column="ID_SLOT" sequenceNumberInPK="1"/>
+         <index name="PK_PSLP_T_SLOT" unique="true">
+            <column ascending="true" name="ID_SLOT"/>
+         </index>
+         <index name="IE_PSLP_T_SLOT_01" unique="false">
+            <column ascending="true" name="ID_GIORNO"/>
+         </index>
+         <checkConstraint constraint="FLG_ECCEZIONE= 'S'" name="CHK_PSLP_T_SLOT_01"/>
+         <checkConstraint constraint="NUM_MAX_PRENOTAZIONI &gt;= NUM_PRENOTAZIONI_VALIDE" name="CHK_PSLP_T_SLOT_02"/>
+      </table>
+      <table name="PSLP_T_UTENTE" numRows="205" remarks="" schema="PSLP" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="ID_UTENTE" nullable="false" remarks="" size="22" type="NUMBER">
+            <child column="ID_RESPONSABILE" foreignKey="FK_PSLP_T_UTENTE_01" implied="false" onDeleteCascade="false" table="PSLP_R_UTENTE"/>
+            <child column="ID_TUTELATO" foreignKey="FK_PSLP_T_UTENTE_02" implied="false" onDeleteCascade="false" table="PSLP_R_UTENTE"/>
+            <child column="ID_UTENTE" foreignKey="FK_PSLP_T_UTENTE_03" implied="false" onDeleteCascade="false" table="PSLP_R_UTENTE_ENTE"/>
+            <child column="ID_UTENTE" foreignKey="FK_PSLP_T_UTENTE_08" implied="false" onDeleteCascade="false" table="PSLP_T_DOCUMENTO"/>
+            <child column="ID_UTENTE" foreignKey="FK_PSLP_T_UTENTE_04" implied="false" onDeleteCascade="false" table="PSLP_T_EVENTO"/>
+            <child column="ID_UTENTE" foreignKey="FK_PSLP_T_UTENTE_06" implied="false" onDeleteCascade="false" table="PSLP_T_PRENOTAZIONE"/>
+            <child column="ID_RESPONSABILE" foreignKey="FK_PSLP_T_UTENTE_07" implied="false" onDeleteCascade="false" table="PSLP_T_RESPONSABILE"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="CF_UTENTE" nullable="false" remarks="" size="16" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="2" name="COGNOME" nullable="false" remarks="" size="70" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="3" name="NOME" nullable="false" remarks="" size="70" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="4" name="COD_TIPO_UTENTE" nullable="false" remarks="" size="5" type="VARCHAR2">
+            <parent column="COD_TIPO_UTENTE" foreignKey="FK_PSLP_D_TIPO_UTENTE_01" implied="false" onDeleteCascade="false" table="PSLP_D_TIPO_UTENTE"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="5" name="EMAIL" nullable="true" remarks="" size="256" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="6" name="IDENTIFICATIVO_SAP" nullable="true" remarks="" size="11" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="7" name="ID_SIL_LAV_ANAGRAFICA" nullable="true" remarks="" size="22" type="NUMBER"/>
+         <column autoUpdated="false" digits="0" id="8" name="D_PRESA_VISIONE_PRIVACY" nullable="true" remarks="" size="7" type="DATE"/>
+         <column autoUpdated="false" digits="0" id="9" name="COD_USER_INSERIM" nullable="false" remarks="" size="16" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="10" name="D_INSERIM" nullable="false" remarks="" size="7" type="DATE"/>
+         <column autoUpdated="false" digits="0" id="11" name="COD_USER_AGGIORN" nullable="false" remarks="" size="16" type="VARCHAR2"/>
+         <column autoUpdated="false" digits="0" id="12" name="D_AGGIORN" nullable="false" remarks="" size="7" type="DATE"/>
+         <column autoUpdated="false" digits="0" id="13" name="D_PRESA_VISIONE_PRIVACY_RDC" nullable="true" remarks="Data di presa visione della privacy per il Reddito Di Cittadinanza" size="7" type="DATE"/>
+         <primaryKey column="ID_UTENTE" sequenceNumberInPK="1"/>
+         <index name="PK_PSLP_T_UTENTE" unique="true">
+            <column ascending="true" name="ID_UTENTE"/>
+         </index>
+         <index name="IE_PSLP_T_UTENTE_01" unique="false">
+            <column ascending="true" name="ID_SIL_LAV_ANAGRAFICA"/>
+         </index>
+         <index name="IE_PSLP_T_UTENTE_02" unique="false">
+            <column ascending="true" name="CF_UTENTE"/>
+         </index>
+         <index name="IE_PSLP_T_UTENTE_03" unique="false">
+            <column ascending="true" name="COD_TIPO_UTENTE"/>
+         </index>
+      </table>
+   </tables>
+</database>

@@ -1,0 +1,12 @@
+/* **************************************************** */
+/* Copyright Regione Piemonte - 2021					*/
+/* SPDX-License-Identifier: EUPL-1.2-or-later			*/
+/* **************************************************** */
+ALTER TABLE PSLP_T_EVENTO ADD COD_AMBITO VARCHAR2(5);
+UPDATE PSLP_T_EVENTO SET COD_AMBITO = 'GG';
+--	ALTER TABLE PSLP_T_EVENTO MODIFY COD_AMBITO NOT NULL;
+CREATE INDEX IE_PSLP_T_EVENTO_05 ON PSLP_T_EVENTO (COD_AMBITO) TABLESPACE PSLP_IDX;
+ALTER TABLE PSLP_T_EVENTO 
+  ADD CONSTRAINT FK_PSLP_D_AMBITO_06 
+      FOREIGN KEY (COD_AMBITO)
+	  REFERENCES PSLP_D_AMBITO;
